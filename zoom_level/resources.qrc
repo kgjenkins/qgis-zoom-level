@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/plugins/zoom_level" >
-        <file>icon.png</file>
-    </qresource>
-</RCC>
