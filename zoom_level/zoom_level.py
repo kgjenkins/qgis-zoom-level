@@ -46,7 +46,7 @@ class ZoomLevel:
         """
         # Save reference to the QGIS interface
         self.iface = iface
-        self.statusBar = iface.mainWindow().statusBar()
+        self.iface.mapCanvas().scaleChanged.connect(self.run)
 
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
