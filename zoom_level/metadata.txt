@@ -9,10 +9,7 @@ author=Keith Jenkins
 email=kgjenkins@gmail.com
 tracker=https://github.com/kgjenkins/qgis-zoom-level/issues
 repository=https://github.com/kgjenkins/qgis-zoom-level
-about=This plugin will display the zoom level of the current map in the status
-bar. Zoom levels are those used on tiled web maps, typically ranging from 0
-(global view) to 20 or more.  For more details about zoom levels, see <a
-href="https://wiki.openstreetmap.org/wiki/Zoom_levels">https://wiki.openstreetmap.org/wiki/Zoom_levels</a>
+about=This plugin will display the zoom level of the current map in the status bar. Zoom levels are those used on tiled web maps, typically ranging from 0 (global view) to 20 or more.  For more details about zoom levels, see <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">https://wiki.openstreetmap.org/wiki/Zoom_levels</a>
 
 
 # Recommended items:
