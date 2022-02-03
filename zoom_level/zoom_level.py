@@ -42,8 +42,10 @@ class ZoomLevel:
         """Display the current zoom level in the status bar"""
 
         scale = self.iface.mapCanvas().scale()
-
+        # scale denominator at zoom level 0 of GoogleCRS84Quad
+        s0 = 559082264.0287178
+        scale = self.iface.mapCanvas().scale()
         # Convert the scale to the equivalent zoom level
         # (This is accurate enough for at least 2 decimal places)
-        zoom = 29.1402 - log2(scale)
+        zoom = log2(s0 / scale) / log2(2) - 1
         self.iface.mainWindow().statusBar().showMessage('Zoom Level {:.2f}'.format(zoom))
