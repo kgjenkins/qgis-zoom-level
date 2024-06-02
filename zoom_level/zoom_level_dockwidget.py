@@ -23,8 +23,7 @@
 """
 
 from qgis.PyQt.QtCore import pyqtSignal
-from qgis.PyQt.QtWidgets import QWidget, QDockWidget, QGridLayout, QPushButton, QLineEdit, QToolButton, QLabel
-from qgis.PyQt.QtGui import QIcon, QPixmap
+from qgis.PyQt.QtWidgets import QWidget, QDockWidget, QGridLayout, QLabel, QDoubleSpinBox
 
 
 class ZoomLevelDockWidget(QDockWidget):
@@ -35,7 +34,7 @@ class ZoomLevelDockWidget(QDockWidget):
         """Constructor."""
         super(ZoomLevelDockWidget, self).__init__(parent)
 
-        self.setWindowTitle(self.tr("Zoom Level"))
+        self.setWindowTitle(self.tr("Zoom Level plugin"))
         self.setGeometry(0, 0, 300, 100)
         self.dockWidgetContents = QWidget(self)
         self.setWidget(self.dockWidgetContents)
@@ -43,26 +42,27 @@ class ZoomLevelDockWidget(QDockWidget):
         self.gridLayout.setColumnStretch(1,5)
         self.dockWidgetContents.setLayout(self.gridLayout)
 
-        #self.dockWidgetContents.layout().setColumnMinimumWidth(0, 36)
-
         self.zoomLabel = QLabel(self.dockWidgetContents)
         self.zoomLabel.setText('Zoom Level')
-        self.zoomValue = QLabel(self.dockWidgetContents)
+
+        self.zoomValue = QDoubleSpinBox()
+        self.zoomValue.setDecimals(2)
+        self.zoomValue.setSingleStep(1)
 
         self.xyzLabel = QLabel(self.dockWidgetContents)
-        self.xyzLabel.setText('XYZ')
+        self.xyzLabel.setText('')
         self.xyzValue = QLabel(self.dockWidgetContents)
 
-        self.vectorLabel = QLabel(self.dockWidgetContents)
-        self.vectorLabel.setText('Vector Tiles')
-        self.vectorValue = QLabel(self.dockWidgetContents)
+        #self.vectorLabel = QLabel(self.dockWidgetContents)
+        #self.vectorLabel.setText('')
+        #self.vectorValue = QLabel(self.dockWidgetContents)
 
         self.dockWidgetContents.layout().addWidget(self.zoomLabel, 0, 0)
         self.dockWidgetContents.layout().addWidget(self.zoomValue, 0, 1)
         self.dockWidgetContents.layout().addWidget(self.xyzLabel, 1, 0)
         self.dockWidgetContents.layout().addWidget(self.xyzValue, 1, 1)
-        self.dockWidgetContents.layout().addWidget(self.vectorLabel, 2, 0)
-        self.dockWidgetContents.layout().addWidget(self.vectorValue, 2, 1)
+        #self.dockWidgetContents.layout().addWidget(self.vectorLabel, 2, 0)
+        #self.dockWidgetContents.layout().addWidget(self.vectorValue, 2, 1)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()

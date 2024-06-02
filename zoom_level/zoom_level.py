@@ -25,6 +25,7 @@ from qgis.PyQt.QtWidgets import QLabel
 from .zoom_level_dockwidget import ZoomLevelDockWidget
 
 from math import log2, floor
+from . import resources
 
 
 class ZoomLevel:
@@ -33,7 +34,7 @@ class ZoomLevel:
         # Save reference to the QGIS interface
         self.iface = iface
         self.actions = []
-        self.menu = 'MENU ZoomLevel'
+        #self.menu = 'MENU ZoomLevel'
 
         # Add zoom widget to left side of status bar
         self.label = QLabel()
@@ -105,11 +106,11 @@ class ZoomLevel:
             action.setWhatsThis(whats_this)
 
         if add_to_toolbar:
-            self.iface.addVectorToolBarIcon(action)
+            self.iface.addToolBarIcon(action)
 
         if add_to_menu:
-            self.iface.addPluginToVectorMenu(
-                "",
+            self.iface.addPluginToMenu(
+                "Zoom Level",
                 action)
 
         self.actions.append(action)
@@ -137,10 +138,10 @@ class ZoomLevel:
         """Remove widget"""
         self.iface.statusBarIface().removeWidget(self.label)
         for action in self.actions:
-            self.iface.removePluginVectorMenu(
+            self.iface.removePluginMenu(
                 "",
                 action)
-            self.iface.removeVectorToolBarIcon(action)
+            self.iface.removeToolBarIcon(action)
 
     def run(self):
         """Run method that loads and starts the plugin"""
@@ -153,6 +154,9 @@ class ZoomLevel:
 
             # Display zoom level whenever the map scale changes
             self.iface.mapCanvas().scaleChanged.connect(self.displayZoomLevel)
+
+            # Update map scale if user changes the zoom value
+            self.dockwidget.zoomValue.valueChanged.connect(self.updateZoomLevel)
         
             # connect to provide cleanup on closing of dockwidget
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
@@ -161,8 +165,14 @@ class ZoomLevel:
             self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
             self.dockwidget.show()
 
+    def updateZoomLevel(self):
+        """Update the map scale based to match zoom level"""
+        zoom = self.dockwidget.zoomValue.value()
+        scale = 591658688 / pow(2, zoom)
+        self.iface.mapCanvas().zoomScale(scale)
+
     def displayZoomLevel(self):
-        """Display the current zoom level in the status bar"""
+        """Display the current zoom level"""
 
         # Zoom level 1 scale "1:591658688" is the scale that QGIS reports
         # after "zoom to native resolution (100%)" when viewing OpenStreetMap
@@ -180,5 +190,12 @@ class ZoomLevel:
         mapScale = self.iface.mapCanvas().scale()
         zoom = log2(z1scale / mapScale)
         msg = '{:.2f}'.format(zoom)
-        self.dockwidget.zoomValue.setText(msg)
-        self.dockwidget.xyzValue.setText(str(floor(zoom + 0.586)))
+        self.dockwidget.zoomValue.setValue(zoom)
+
+        # estimate which XYZ zoom level would get requested
+        msg = 'XYZ tile requests: zoom {}'.format(floor(zoom + 0.586))
+        self.dockwidget.xyzValue.setText(msg)
+
+        # estimate which vector tiles zoom level would get requested
+        #msg = 'Vector tile requests: zoom {}'.format(floor(zoom + 0.586))
+        #self.dockwidget.xyzValue.setText(msg)

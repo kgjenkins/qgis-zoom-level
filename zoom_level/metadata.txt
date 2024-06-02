@@ -21,7 +21,7 @@ experimental=False
 deprecated=False
 server=False
 
-#icon=
+icon=zoom_level.png
 #plugin_dependencies=
 #category=
 
