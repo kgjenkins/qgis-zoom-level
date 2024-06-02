@@ -16,35 +16,163 @@ ZoomLevel
  *                                                                         *
  ***************************************************************************/
 """
-from math import log2
+
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction
 from qgis.PyQt.QtWidgets import QLabel
+
+from .zoom_level_dockwidget import ZoomLevelDockWidget
+
+from math import log2, floor
+from . import resources
+
 
 class ZoomLevel:
 
     def __init__(self, iface):
         # Save reference to the QGIS interface
         self.iface = iface
+        self.actions = []
+        #self.menu = 'MENU ZoomLevel'
 
         # Add zoom widget to left side of status bar
         self.label = QLabel()
         iface.statusBarIface().addPermanentWidget(self.label)
         self.label.show()
 
-        # Display zoom level whenever the map scale changes
-        self.iface.mapCanvas().scaleChanged.connect(self.displayZoomLevel)
+        self.pluginIsActive = False
+        self.dockwidget = None
+
+    def add_action(
+            self,
+            icon_path,
+            text,
+            callback,
+            enabled_flag=True,
+            add_to_menu=True,
+            add_to_toolbar=True,
+            status_tip=None,
+            whats_this=None,
+            parent=None):
+        """Add a toolbar icon to the toolbar.
+
+        :param icon_path: Path to the icon for this action. Can be a resource
+            path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
+        :type icon_path: str
+
+        :param text: Text that should be shown in menu items for this action.
+        :type text: str
+
+        :param callback: Function to be called when the action is triggered.
+        :type callback: function
+
+        :param enabled_flag: A flag indicating if the action should be enabled
+            by default. Defaults to True.
+        :type enabled_flag: bool
+
+        :param add_to_menu: Flag indicating whether the action should also
+            be added to the menu. Defaults to True.
+        :type add_to_menu: bool
+
+        :param add_to_toolbar: Flag indicating whether the action should also
+            be added to the toolbar. Defaults to True.
+        :type add_to_toolbar: bool
+
+        :param status_tip: Optional text to show in a popup when mouse pointer
+            hovers over the action.
+        :type status_tip: str
+
+        :param parent: Parent widget for the new action. Defaults None.
+        :type parent: QWidget
+
+        :param whats_this: Optional text to show in the status bar when the
+            mouse pointer hovers over the action.
+
+        :returns: The action that was created. Note that the action is also
+            added to self.actions list.
+        :rtype: QAction
+        """
+
+        icon = QIcon(icon_path)
+        action = QAction(icon, text, parent)
+        action.triggered.connect(callback)
+        action.setEnabled(enabled_flag)
+
+        if status_tip is not None:
+            action.setStatusTip(status_tip)
+
+        if whats_this is not None:
+            action.setWhatsThis(whats_this)
+
+        if add_to_toolbar:
+            self.iface.addToolBarIcon(action)
+
+        if add_to_menu:
+            self.iface.addPluginToMenu(
+                "Zoom Level",
+                action)
+
+        self.actions.append(action)
+
+        return action
+
 
     def initGui(self):
-        """This plugin makes no menu or toolbar changes."""
-        pass
+        """Add icon button to toolbar."""
+        icon_path = ':/plugins/zoom_level/zoom_level.png'
+        self.add_action(
+            icon_path,
+            text = 'Zoom Level',
+            callback = self.run,
+            parent = self.iface.mainWindow()
+        )
+
+    def onClosePlugin(self):
+        """Cleanup necessary items here when plugin dockwidget is closed"""
+        self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
+        self.pluginIsActive = False
 
 
     def unload(self):
         """Remove widget"""
         self.iface.statusBarIface().removeWidget(self.label)
+        for action in self.actions:
+            self.iface.removePluginMenu(
+                "",
+                action)
+            self.iface.removeToolBarIcon(action)
 
+    def run(self):
+        """Run method that loads and starts the plugin"""
+
+        if not self.pluginIsActive:
+            self.pluginIsActive = True
+            if self.dockwidget == None:
+                self.dockwidget = ZoomLevelDockWidget()
+                self.displayZoomLevel()
+
+            # Display zoom level whenever the map scale changes
+            self.iface.mapCanvas().scaleChanged.connect(self.displayZoomLevel)
+
+            # Update map scale if user changes the zoom value
+            self.dockwidget.zoomValue.valueChanged.connect(self.updateZoomLevel)
+        
+            # connect to provide cleanup on closing of dockwidget
+            self.dockwidget.closingPlugin.connect(self.onClosePlugin)
+
+            # show the dockwidget
+            self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
+            self.dockwidget.show()
+
+    def updateZoomLevel(self):
+        """Update the map scale based to match zoom level"""
+        zoom = self.dockwidget.zoomValue.value()
+        scale = 591658688 / pow(2, zoom)
+        self.iface.mapCanvas().zoomScale(scale)
 
     def displayZoomLevel(self):
-        """Display the current zoom level in the status bar"""
+        """Display the current zoom level"""
 
         # Zoom level 1 scale "1:591658688" is the scale that QGIS reports
         # after "zoom to native resolution (100%)" when viewing OpenStreetMap
@@ -61,5 +189,13 @@ class ZoomLevel:
         z1scale = 591658688
         mapScale = self.iface.mapCanvas().scale()
         zoom = log2(z1scale / mapScale)
-        msg = 'Zoom Level {:.2f}'.format(zoom)
-        self.label.setText(msg)
+        msg = '{:.2f}'.format(zoom)
+        self.dockwidget.zoomValue.setValue(zoom)
+
+        # estimate which XYZ zoom level would get requested
+        msg = 'XYZ tile requests: zoom {}'.format(floor(zoom + 0.586))
+        self.dockwidget.xyzValue.setText(msg)
+
+        # estimate which vector tiles zoom level would get requested
+        #msg = 'Vector tile requests: zoom {}'.format(floor(zoom + 0.586))
+        #self.dockwidget.xyzValue.setText(msg)
