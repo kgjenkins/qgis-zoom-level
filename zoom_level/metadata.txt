@@ -11,7 +11,6 @@ tracker=https://github.com/kgjenkins/qgis-zoom-level/issues
 repository=https://github.com/kgjenkins/qgis-zoom-level
 about=This plugin will display the zoom level of the current map in a dockable panel.  The number reported should be accurate for maps using EPSG:3857 -- no guarantees for other CRS!  Note that vector tile layers in QGIS tend to get requested at a slightly different zoom level than XYZ layers.  For more details about zoom levels, see <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">https://wiki.openstreetmap.org/wiki/Zoom_levels</a>
 
-
 # Recommended items:
 
 hasProcessingProvider=no
@@ -36,5 +35,3 @@ changelog=
   
   0.1.0, 2020-01-23
   - Initial release
-
-

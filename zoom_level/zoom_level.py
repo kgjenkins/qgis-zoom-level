@@ -198,3 +198,4 @@ class ZoomLevel:
         # estimate which vector tile zoom level would get requested
         msg = str(floor(zoom - 1))
         self.dockwidget.vectorValue.setText(msg)
+        
