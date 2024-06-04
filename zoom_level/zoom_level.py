@@ -34,7 +34,6 @@ class ZoomLevel:
         # Save reference to the QGIS interface
         self.iface = iface
         self.actions = []
-        #self.menu = 'MENU ZoomLevel'
 
         # Add zoom widget to left side of status bar
         self.label = QLabel()
@@ -120,7 +119,7 @@ class ZoomLevel:
 
     def initGui(self):
         """Add icon button to toolbar."""
-        icon_path = ':/plugins/zoom_level/zoom_level.png'
+        icon_path = ':/plugins/zoom_level/icon.png'
         self.add_action(
             icon_path,
             text = 'Zoom Level',
@@ -193,9 +192,9 @@ class ZoomLevel:
         self.dockwidget.zoomValue.setValue(zoom)
 
         # estimate which XYZ zoom level would get requested
-        msg = 'XYZ tile requests: zoom {}'.format(floor(zoom + 0.586))
+        msg = str(floor(zoom + 0.586))
         self.dockwidget.xyzValue.setText(msg)
 
-        # estimate which vector tiles zoom level would get requested
-        #msg = 'Vector tile requests: zoom {}'.format(floor(zoom + 0.586))
-        #self.dockwidget.xyzValue.setText(msg)
+        # estimate which vector tile zoom level would get requested
+        msg = str(floor(zoom - 1))
+        self.dockwidget.vectorValue.setText(msg)
