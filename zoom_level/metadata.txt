@@ -3,7 +3,7 @@
 [general]
 name=Zoom Level
 qgisMinimumVersion=3.0
-description=Displays the zoom level of the map in a dockable panel.
+description=Displays the zoom level of the map
 version=0.3.0
 author=Keith Jenkins
 email=kgjenkins@gmail.com
