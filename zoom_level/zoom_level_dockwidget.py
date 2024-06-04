@@ -39,30 +39,29 @@ class ZoomLevelDockWidget(QDockWidget):
         self.dockWidgetContents = QWidget(self)
         self.setWidget(self.dockWidgetContents)
         self.gridLayout = QGridLayout()
-        self.gridLayout.setColumnStretch(1,5)
         self.dockWidgetContents.setLayout(self.gridLayout)
 
         self.zoomLabel = QLabel(self.dockWidgetContents)
         self.zoomLabel.setText('Zoom Level')
 
         self.zoomValue = QDoubleSpinBox()
-        self.zoomValue.setDecimals(2)
+        self.zoomValue.setDecimals(3)
         self.zoomValue.setSingleStep(1)
 
         self.xyzLabel = QLabel(self.dockWidgetContents)
-        self.xyzLabel.setText('')
+        self.xyzLabel.setText('XYZ tile requests')
         self.xyzValue = QLabel(self.dockWidgetContents)
 
-        #self.vectorLabel = QLabel(self.dockWidgetContents)
-        #self.vectorLabel.setText('')
-        #self.vectorValue = QLabel(self.dockWidgetContents)
+        self.vectorLabel = QLabel(self.dockWidgetContents)
+        self.vectorLabel.setText('Vector tile requests')
+        self.vectorValue = QLabel(self.dockWidgetContents)
 
         self.dockWidgetContents.layout().addWidget(self.zoomLabel, 0, 0)
         self.dockWidgetContents.layout().addWidget(self.zoomValue, 0, 1)
         self.dockWidgetContents.layout().addWidget(self.xyzLabel, 1, 0)
         self.dockWidgetContents.layout().addWidget(self.xyzValue, 1, 1)
-        #self.dockWidgetContents.layout().addWidget(self.vectorLabel, 2, 0)
-        #self.dockWidgetContents.layout().addWidget(self.vectorValue, 2, 1)
+        self.dockWidgetContents.layout().addWidget(self.vectorLabel, 2, 0)
+        self.dockWidgetContents.layout().addWidget(self.vectorValue, 2, 1)
 
     def closeEvent(self, event):
         self.closingPlugin.emit()

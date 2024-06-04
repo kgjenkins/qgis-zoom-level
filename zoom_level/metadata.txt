@@ -3,14 +3,13 @@
 [general]
 name=Zoom Level
 qgisMinimumVersion=3.0
-description=Displays the zoom level of the map in a dockable panel.
+description=Displays the zoom level of the map
 version=0.3.0
 author=Keith Jenkins
 email=kgjenkins@gmail.com
 tracker=https://github.com/kgjenkins/qgis-zoom-level/issues
 repository=https://github.com/kgjenkins/qgis-zoom-level
-about=This plugin will display the zoom level of the current map in the status bar. Zoom levels are those used on XYZ tiled web maps, typically ranging from 0 (global view) to 20 or more.  The number reported should be accurate for maps using EPSG:3857 -- no guarantees for other CRS!  Note that vector tile layers in QGIS tend to get requested at a slightly different zoom level than XYZ layers.  For more details about zoom levels, see <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">https://wiki.openstreetmap.org/wiki/Zoom_levels</a>
-
+about=This plugin will display the zoom level of the current map in a dockable panel.  The number reported should be accurate for maps using EPSG:3857 -- no guarantees for other CRS!  Note that vector tile layers in QGIS tend to get requested at a slightly different zoom level than XYZ layers.  For more details about zoom levels, see <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">https://wiki.openstreetmap.org/wiki/Zoom_levels</a>
 
 # Recommended items:
 
@@ -21,13 +20,18 @@ experimental=False
 deprecated=False
 server=False
 
-icon=zoom_level.png
+icon=icon.png
 #plugin_dependencies=
 #category=
 
 changelog=
-  2024-06-02 0.3.0 Use dockable panel instead of status bar
-  2022-02-20 0.2.0 Improved zoom calculation based on suggestion by Adam Laža
-  2020-01-23 0.1.0 Initial release
-
-
+  0.3.0, 2024-06-04
+  - Dockable panel instead of status bar
+  - Changing the zoom level will update the map scale
+  - Show (estimated) zoom levels for XYZ and vectortile requests
+  
+  0.2.0, 2022-02-20
+  - Improved zoom calculation based on suggestion by Adam Laža
+  
+  0.1.0, 2020-01-23
+  - Initial release
