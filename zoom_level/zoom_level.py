@@ -2,7 +2,7 @@
 """
 ZoomLevel
 
- A QGIS plugin to display the zoom level of the map in the status bar.
+ A QGIS plugin to display the zoom level of the map
                               -------------------
         begin                : 2020-01-23
         copyright            : (C) 2020-2024 by Keith Jenkins
@@ -34,12 +34,6 @@ class ZoomLevel:
         # Save reference to the QGIS interface
         self.iface = iface
         self.actions = []
-
-        # Add zoom widget to left side of status bar
-        self.label = QLabel()
-        iface.statusBarIface().addPermanentWidget(self.label)
-        self.label.show()
-
         self.pluginIsActive = False
         self.dockwidget = None
 
@@ -135,7 +129,6 @@ class ZoomLevel:
 
     def unload(self):
         """Remove widget"""
-        self.iface.statusBarIface().removeWidget(self.label)
         for action in self.actions:
             self.iface.removePluginMenu(
                 "",
