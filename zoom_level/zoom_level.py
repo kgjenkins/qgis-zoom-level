@@ -131,7 +131,7 @@ class ZoomLevel:
         """Remove widget"""
         for action in self.actions:
             self.iface.removePluginMenu(
-                "",
+                "Zoom Level",
                 action)
             self.iface.removeToolBarIcon(action)
 
