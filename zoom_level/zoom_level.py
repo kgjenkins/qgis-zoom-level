@@ -4,7 +4,7 @@ ZoomLevel
 
  A QGIS plugin to display the zoom level of the map
                               -------------------
-        begin                : 2020-01-23
+        updated              : 2020-11-10
         copyright            : (C) 2020-2024 by Keith Jenkins
         email                : kgjenkins@gmail.com
  /***************************************************************************
@@ -17,7 +17,7 @@ ZoomLevel
  ***************************************************************************/
 """
 
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, QSettings
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 from qgis.PyQt.QtWidgets import QLabel
@@ -120,6 +120,8 @@ class ZoomLevel:
             callback = self.run,
             parent = self.iface.mainWindow()
         )
+        if QSettings().value('plugins/zoom_level/pluginIsActive', True, type=bool):
+            self.run()
 
     def onClosePlugin(self):
         """Cleanup necessary items here when plugin dockwidget is closed"""
@@ -134,6 +136,7 @@ class ZoomLevel:
                 "Zoom Level",
                 action)
             self.iface.removeToolBarIcon(action)
+        QSettings().setValue('plugins/zoom_level/pluginIsActive', self.pluginIsActive)
 
     def run(self):
         """Run method that loads and starts the plugin"""
