@@ -4,7 +4,7 @@
 name=Zoom Level
 qgisMinimumVersion=3.0
 description=Displays the zoom level of the map
-version=0.3.2
+version=0.3.3
 author=Keith Jenkins
 email=kgjenkins@gmail.com
 tracker=https://github.com/kgjenkins/qgis-zoom-level/issues
@@ -25,6 +25,9 @@ icon=icon.png
 #category=
 
 changelog=
+  0.3.3, 2025-03-21
+  - setObjectName('zoom-level-plugin-dock') for Qt access
+
   0.3.2, 2024-11-10
   - remember zoom_level panel status when QGIS is reopened
 

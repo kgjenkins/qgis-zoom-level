@@ -4,8 +4,8 @@ ZoomLevel
 
  A QGIS plugin to display the zoom level of the map
                               -------------------
-        updated              : 2020-11-10
-        copyright            : (C) 2020-2024 by Keith Jenkins
+        updated              : 2025-03-21
+        copyright            : (C) 2025 by Keith Jenkins
         email                : kgjenkins@gmail.com
  /***************************************************************************
  *                                                                         *
